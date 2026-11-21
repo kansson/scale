@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-21T00:00:00Z",
+  "title": "Design System: Scale",
+  "extensions": {
+    "colorMeta": {
+      "brand-seed": {
+        "role": "primary",
+        "displayName": "Field Green",
+        "canonical": "#3f6b5c",
+        "note": "Seed of the Material 3 scheme on phones without dynamic colour. On-screen colours are Material roles resolved at runtime, not this hex.",
+        "tonalRamp": [
+          "#0f1f1a",
+          "#1d3b33",
+          "#2c5347",
+          "#3f6b5c",
+          "#5a8676",
+          "#7aa596",
+          "#a3c7b9",
+          "#d3ebe1"
+        ]
+      },
+      "launcher-ground": {
+        "role": "neutral",
+        "displayName": "Launcher Ground",
+        "canonical": "#1d3b33",
+        "note": "Launcher icon background only (assets/icon.svg).",
+        "tonalRamp": [
+          "#0b1714",
+          "#1d3b33",
+          "#2a4c43",
+          "#3c6156",
+          "#56786d",
+          "#789689",
+          "#a3baaf",
+          "#d5e2dc"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "The weight. displayLarge, tabular, weight 300 while settling and 800 settled, 168sp step auto-sized to 56sp in 4sp steps."
+      },
+      "figure-unit": {
+        "displayName": "Unit",
+        "purpose": "headlineMedium beside the figure on its baseline; hidden for the placeholder."
+      },
+      "dialog-title": {
+        "displayName": "Dialog title",
+        "purpose": "headlineSmall in choice dialogs."
+      },
+      "dock-title": {
+        "displayName": "Dock title",
+        "purpose": "titleLarge: what is happening."
+      },
+      "group-title": {
+        "displayName": "Group title",
+        "purpose": "titleSmall in primary above Settings groups."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "bodyMedium: the dock's one supporting line."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "labelLarge: button labels."
+      }
+    },
+    "colorRoles": {
+      "surface": "Screens, app bars, root background behind stack transitions.",
+      "surfaceContainerHigh": "Dock and Settings card rows.",
+      "surfaceContainerHighest": "Wavy indicator track, only while moving.",
+      "primary": "Saved badge, wavy indicator, filled buttons, group titles.",
+      "secondaryContainer": "Neutral dock badge, selected choice row.",
+      "errorContainer": "Failed-save badge and error notices.",
+      "onSurface": "Settled figure, titles.",
+      "onSurfaceVariant": "Moving figure, unit, supporting lines, row glyphs.",
+      "outlineVariant": "Placeholder figure."
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "theme-motion",
+        "value": "MaterialExpressiveTheme motion scheme (Expo UI Host)",
+        "purpose": "All component motion follows the theme's M3 motion scheme."
+      },
+      {
+        "name": "figure-colour",
+        "value": "motionScheme.defaultEffectsSpec()",
+        "purpose": "Figure colour between placeholder, moving and settled."
+      },
+      {
+        "name": "figure-strokes",
+        "value": "motionScheme.slowEffectsSpec(), 300 -> 800",
+        "purpose": "Figure weight thickening as the reading settles."
+      },
+      {
+        "name": "dock-size",
+        "value": "Modifier.animateContentSize()",
+        "purpose": "Dock and Settings groups grow or shrink as a button or row arrives."
+      },
+      {
+        "name": "settling-wave",
+        "value": "LinearWavyProgressIndicator, indeterminate",
+        "purpose": "Along the dock's top edge only while settling or connecting; zero amplitude and transparent track at rest."
+      },
+      {
+        "name": "settle-haptic",
+        "value": "HapticFeedbackType.Confirm",
+        "purpose": "Once, on the transition from settling to settled."
+      }
+    ],
+    "breakpoints": []
+  },
+  "components": [
+    {
+      "name": "Dock",
+      "kind": "custom",
+      "refersTo": "dock",
+      "description": "The weighing screen's bottom panel: badge, title, one line, at most one full-width button. Colours approximate the brand-seed light scheme.",
+      "html": "<div class=\"ds-dock\"><div class=\"ds-dock-row\"><div class=\"ds-dock-badge\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z\"/></svg></div><div><div class=\"ds-dock-title\">Saved to Health Connect</div><div class=\"ds-dock-line\">Weighed at 07:12</div></div></div></div>",
+      "css": ".ds-dock { background: #e5e9e6; border-radius: 28px 28px 0 0; padding: 26px 24px 24px; font-family: Roboto, sans-serif; } .ds-dock-row { display: flex; align-items: center; gap: 16px; } .ds-dock-badge { width: 56px; height: 56px; border-radius: 18px; background: #3f6b5c; color: #ffffff; display: grid; place-items: center; flex: none; } .ds-dock-title { font-size: 22px; line-height: 28px; color: #191c1b; } .ds-dock-line { font-size: 14px; line-height: 20px; color: #404945; margin-top: 2px; }"
+    },
+    {
+      "name": "Filled Dock Button",
+      "kind": "button",
+      "refersTo": "dock-button",
+      "description": "The one thing to do next: full-width 56dp pill.",
+      "html": "<button class=\"ds-btn-filled\">Save to Health Connect</button>",
+      "css": ".ds-btn-filled { width: 100%; height: 56px; border: none; border-radius: 9999px; background: #3f6b5c; color: #ffffff; font: 500 14px/20px Roboto, sans-serif; letter-spacing: 0.1px; transition: filter 0.2s; } .ds-btn-filled:hover { filter: brightness(1.08); } .ds-btn-filled:focus-visible { outline: 2px solid #3f6b5c; outline-offset: 2px; } .ds-btn-filled:active { filter: brightness(0.92); }"
+    },
+    {
+      "name": "Weight Readout",
+      "kind": "custom",
+      "refersTo": "figure",
+      "description": "Tabular figure with unit on one baseline; light while settling, heavy when settled.",
+      "html": "<div class=\"ds-readout\"><span class=\"ds-figure\">72.4</span><span class=\"ds-unit\">kg</span></div>",
+      "css": ".ds-readout { display: flex; align-items: baseline; gap: 8px; font-family: Roboto, sans-serif; } .ds-figure { font-size: 120px; line-height: 1; font-weight: 800; letter-spacing: -2px; font-variant-numeric: tabular-nums; color: #191c1b; transition: font-weight 0.5s, color 0.2s; } .ds-readout:hover .ds-figure { font-weight: 300; color: #404945; } .ds-unit { font-size: 28px; color: #404945; }"
+    },
+    {
+      "name": "Settings Group",
+      "kind": "card",
+      "refersTo": "settings-group-row",
+      "description": "Connected card rows: 20dp outer corners, 4dp joins, 2dp gaps, primary group title.",
+      "html": "<div class=\"ds-group\"><div class=\"ds-group-title\">Appearance</div><div class=\"ds-row ds-first\">Theme<span>System</span></div><div class=\"ds-row ds-last\">Language<span>English</span></div></div>",
+      "css": ".ds-group { font-family: Roboto, sans-serif; display: flex; flex-direction: column; gap: 2px; } .ds-group-title { color: #3f6b5c; font: 500 14px/20px Roboto, sans-serif; padding: 0 4px 6px; } .ds-row { background: #e5e9e6; padding: 16px; border-radius: 4px; color: #191c1b; font-size: 16px; display: flex; flex-direction: column; transition: background 0.2s; } .ds-row span { color: #404945; font-size: 14px; } .ds-row:hover { background: #dfe4e0; } .ds-first { border-radius: 20px 20px 4px 4px; } .ds-last { border-radius: 4px 4px 20px 20px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Scale's Own Display",
+    "overview": "Scale is plain Material 3 expressive, the same house style as the owner's other Android apps, coloured by the wallpaper. Nothing on screen is decorative: the weight fills the upper screen like a scale's readout, and everything about it (what to do, what happened, the one action) sits in a single dock at the bottom edge, under the thumb. The figure carries state in its own strokes: light while the scale moves, heavy once it settles.\n\nDensity is low on the weighing screen and standard Material on Settings. Colour does jobs only: primary marks settled and saved, error marks a failed save, and everything else is surface tones. All UI is native Jetpack Compose through Expo UI and the local bridge in `modules/android-components`; there are no React Native look-alikes.",
+    "keyCharacteristics": [
+      "Dynamic colour from the wallpaper, always; the brand seed only on phones without it.",
+      "One figure, as large as the width allows, with tabular digits that change in place.",
+      "One dock, one badge, one title, one line, at most one full-width button.",
+      "Tonal layering, no shadows.",
+      "Motion only while something moves."
+    ],
+    "rules": [
+      {
+        "name": "The Colour Does Jobs Rule",
+        "body": "Primary appears only for settled, saved, or the next action; error only for a failure. A screen at rest is surface tones.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Raw Roles Rule",
+        "body": "Screens never name a colour role or hex. Roles are chosen inside `src/ui` primitives and the Compose bridge.",
+        "section": "colors"
+      },
+      {
+        "name": "The Strokes Carry State Rule",
+        "body": "The figure's weight is the settling signal: 300 while moving, 800 once settled. Do not add a separate \"settled\" badge or line to say the same thing.",
+        "section": "typography"
+      },
+      {
+        "name": "The Placeholder Has No Unit Rule",
+        "body": "Before a reading, the figure shows dashes (`‒‒.‒`, heavy, `outlineVariant`) and no unit; the unit is the scale's to report.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tonal Step Rule",
+        "body": "A container is one tonal step above its ground; separation comes from tone and corner shape, never a line or shadow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** build screens from `src/ui` primitives; add a named primitive when something is missing.",
+      "**Do** add glyphs to `src/ui/glyphs.ts`, named for meaning (`saved`, `warning`), not appearance.",
+      "**Do** keep the figure centred above the fixed dock reserve so it never jumps.",
+      "**Do** keep the wavy indicator laid out at all times and show it only while something moves.",
+      "**Do** keep Scaffold slots mounted (the actions row is always present); the native Scaffold resolves slots once.",
+      "**Do** guard an app bar action's handler instead of toggling `enabled`.",
+      "**Do** key list rows by the slots they have; Compose reads a `ListItem`'s slots once."
+    ],
+    "donts": [
+      "**Don't** draw a settled line or divider on the dock's top edge; a straight settled indicator read as a divider on device.",
+      "**Don't** toggle `enabled` on an icon button inside an app bar slot; Expo UI removes it.",
+      "**Don't** name a Material Symbol or a colour role in a screen.",
+      "**Don't** build React Native look-alikes of Material 3 pieces; missing ones go in `modules/android-components`.",
+      "**Don't** show a unit before the scale reports one.",
+      "**Don't** add shadows or borders to separate surfaces."
+    ]
+  }
+}

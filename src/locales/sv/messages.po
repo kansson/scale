@@ -1,0 +1,507 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-10-01 11:49+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: sv\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#. Update download progress: the share done, and the version name
+#. placeholder {0}: i18n.number(state.progress, { style: 'percent' })
+#. placeholder {1}: state.update.versionName
+#: src/components/update-alert.tsx
+msgid "{0} of Scale {1}"
+msgstr "{0} av Scale {1}"
+
+#. Under Undo last weight: the weight, such as 72.4 kg, and its date and time
+#: src/screens/settings.tsx
+msgid "{amount}, weighed {taken}"
+msgstr "{amount}, vägd {taken}"
+
+#. Settings section about the app
+#: src/screens/settings.tsx
+msgid "About"
+msgstr "Om"
+
+#. Asks for a permission
+#. Asks for a permission
+#: src/screens/scale.tsx
+msgid "Allow"
+msgstr "Tillåt"
+
+#. Dock title asking for permission to write weights to Health Connect
+#. Settings row asking for permission to write weights
+#: src/screens/scale.tsx
+#: src/screens/settings.tsx
+msgid "Allow Health Connect"
+msgstr "Tillåt Health Connect"
+
+#. Dock title asking for the Bluetooth permission. Nearby devices is its name in Android
+#: src/screens/scale.tsx
+msgid "Allow Nearby devices"
+msgstr "Tillåt Enheter i närheten"
+
+#. Update dialog after opening the system setting that lets the app install its update
+#. placeholder {0}: state.update.versionName
+#: src/components/update-alert.tsx
+msgid "Allow Scale to install apps in the setting that opened, then come back and tap Update to install {0}."
+msgstr "Tillåt Scale att installera appar i inställningen som öppnades, kom sedan tillbaka och tryck på Uppdatera för att installera {0}."
+
+#. Update dialog when the system installer failed
+#: src/components/update-alert.tsx
+msgid "Android couldn’t install the update."
+msgstr "Android kunde inte installera uppdateringen."
+
+#. Settings section
+#: src/screens/settings.tsx
+msgid "Appearance"
+msgstr "Utseende"
+
+#. Top bar button returning to the previous screen
+#: src/ui/screen.tsx
+msgid "Back"
+msgstr "Tillbaka"
+
+#. Dock title when Bluetooth is off
+#: src/screens/scale.tsx
+msgid "Bluetooth is off"
+msgstr "Bluetooth är avstängt"
+
+#. Closes a dialog without changes
+#. Closes a dialog without changes
+#: src/components/update-alert.tsx
+#: src/ui/dialogs.tsx
+msgid "Cancel"
+msgstr "Avbryt"
+
+#. Settings row looking for a newer version
+#: src/screens/settings.tsx
+msgid "Check for updates"
+msgstr "Sök efter uppdateringar"
+
+#. Settings row checking for updates
+#: src/screens/settings.tsx
+msgid "Check now"
+msgstr "Sök nu"
+
+#. Under Couldn’t save: how to fix it
+#: src/screens/scale.tsx
+msgid "Check that Scale may write weights in Health Connect."
+msgstr "Kontrollera att Scale får skriva vikter i Health Connect."
+
+#. Settings row while looking for updates
+#: src/screens/settings.tsx
+msgid "Checking…"
+msgstr "Söker …"
+
+#. Closes an information dialog
+#: src/components/update-alert.tsx
+msgid "Close"
+msgstr "Stäng"
+
+#. The paired scale is connected now
+#: src/screens/settings.tsx
+msgid "Connected"
+msgstr "Ansluten"
+
+#. Connected, waiting for the first weight
+#: src/screens/scale.tsx
+msgid "Connected to {scaleName}"
+msgstr "Ansluten till {scaleName}"
+
+#. While connecting to the scale
+#: src/screens/scale.tsx
+msgid "Connecting to {scaleName}…"
+msgstr "Ansluter till {scaleName} …"
+
+#. Settings row when the releases could not be read
+#: src/screens/settings.tsx
+msgid "Couldn’t check for updates"
+msgstr "Kunde inte söka efter uppdateringar"
+
+#. Update dialog when the releases could not be read
+#: src/components/update-alert.tsx
+msgid "Couldn’t check for updates. Check your connection and try again."
+msgstr "Kunde inte söka efter uppdateringar. Kontrollera anslutningen och försök igen."
+
+#. Snackbar when undoing the last saved weight failed
+#: src/screens/settings.tsx
+msgid "Couldn’t remove the weight. Check that Scale may write weights in Health Connect."
+msgstr "Kunde inte ta bort vikten. Kontrollera att Scale får skriva vikter i Health Connect."
+
+#. Dock title when saving failed
+#: src/screens/scale.tsx
+msgid "Couldn’t save"
+msgstr "Kunde inte spara"
+
+#. Theme option
+#: src/screens/settings.tsx
+msgid "Dark"
+msgstr "Mörkt"
+
+#. Dialog title while downloading
+#: src/components/update-alert.tsx
+msgid "Downloading update"
+msgstr "Laddar ned uppdatering"
+
+#. Under Save automatically while it is on
+#: src/screens/settings.tsx
+msgid "Each weight is saved as it settles"
+msgstr "Varje vikt sparas när den har stabiliserats"
+
+#. Settings row unpairing the scale
+#: src/screens/settings.tsx
+msgid "Forget this scale"
+msgstr "Glöm den här vågen"
+
+#. Settings section; a product name
+#: src/screens/settings.tsx
+msgid "Health Connect"
+msgstr "Health Connect"
+
+#. Settings row on a phone without Health Connect
+#: src/screens/settings.tsx
+msgid "Health Connect isn’t available"
+msgstr "Health Connect är inte tillgängligt"
+
+#. Under Not saved on a phone without Health Connect
+#: src/screens/scale.tsx
+msgid "Health Connect isn’t available on this phone."
+msgstr "Health Connect finns inte på den här telefonen."
+
+#. Opens Health Connect in the Play Store
+#. Opens Health Connect in the Play Store
+#: src/screens/scale.tsx
+msgid "Install"
+msgstr "Installera"
+
+#. Dock title when the phone needs the Health Connect app before weights can be saved
+#. Settings row opening Health Connect in the Play Store
+#: src/screens/scale.tsx
+#: src/screens/settings.tsx
+msgid "Install Health Connect"
+msgstr "Installera Health Connect"
+
+#. Under Not saved when Health Connect must be installed first
+#: src/screens/scale.tsx
+msgid "Install Health Connect to keep your weights."
+msgstr "Installera Health Connect för att spara dina vikter."
+
+#. Dialog title while installing
+#: src/components/update-alert.tsx
+msgid "Installing update"
+msgstr "Installerar uppdatering"
+
+#. Under Step on the scale while looking for the paired scale
+#: src/screens/scale.tsx
+msgid "It wakes and connects as you stand on it."
+msgstr "Den vaknar och ansluter när du ställer dig på den."
+
+#. Settings row opening the app’s language
+#: src/screens/settings.tsx
+msgid "Language"
+msgstr "Språk"
+
+#. Puts off installing an update
+#: src/components/update-alert.tsx
+msgid "Later"
+msgstr "Senare"
+
+#. Settings row opening the licenses of the open-source software the app uses
+#. Title of the screen listing the open-source software the app uses
+#: src/screens/licenses.tsx
+#: src/screens/settings.tsx
+msgid "Licenses"
+msgstr "Licenser"
+
+#. Theme option
+#: src/screens/settings.tsx
+msgid "Light"
+msgstr "Ljust"
+
+#. Under Allow Health Connect
+#. Under Install Health Connect
+#: src/screens/settings.tsx
+msgid "Needed to save your weights"
+msgstr "Behövs för att spara dina vikter"
+
+#. Update channel: a build of the newest changes each day
+#: src/screens/settings.tsx
+msgid "Nightly"
+msgstr "Nattlig"
+
+#. Settings row before pairing
+#: src/screens/settings.tsx
+msgid "No scale paired yet"
+msgstr "Ingen våg parkopplad än"
+
+#. Dock title when the weight cannot be saved
+#. Dock title when the weight cannot be saved
+#: src/screens/scale.tsx
+msgid "Not saved"
+msgstr "Inte sparad"
+
+#. Dock title for a weight not yet saved
+#: src/screens/scale.tsx
+msgid "Not saved yet"
+msgstr "Inte sparad än"
+
+#. Settings row opening Health Connect, to see the weights or the access
+#: src/screens/settings.tsx
+msgid "Open Health Connect"
+msgstr "Öppna Health Connect"
+
+#. Opens the app’s system settings
+#: src/screens/scale.tsx
+msgid "Open settings"
+msgstr "Öppna inställningar"
+
+#. Under the paired scale’s name in settings
+#: src/screens/settings.tsx
+msgid "Paired. It connects when you step on it."
+msgstr "Parkopplad. Den ansluter när du ställer dig på den."
+
+#. Body of the app-wide error screen
+#: src/components/app-error.tsx
+msgid "Please try again."
+msgstr "Försök igen."
+
+#. Shown for a package without a license file; the license is a name like MIT
+#: src/screens/licenses.tsx
+msgid "Released under the {kind} license. The package includes no license text."
+msgstr "Släppt under licensen {kind}. Paketet innehåller ingen licenstext."
+
+#. Dock title after removing the weight
+#: src/screens/scale.tsx
+msgid "Removed from Health Connect"
+msgstr "Borttagen från Health Connect"
+
+#. Settings switch saving every settled weight to Health Connect
+#: src/screens/settings.tsx
+msgid "Save automatically"
+msgstr "Spara automatiskt"
+
+#. Under Save automatically while it is off
+#: src/screens/settings.tsx
+msgid "Save each weight from the main screen"
+msgstr "Spara varje vikt från huvudskärmen"
+
+#. Saves the weight shown
+#: src/screens/scale.tsx
+msgid "Save to Health Connect"
+msgstr "Spara i Health Connect"
+
+#. Dock title after the weight was saved
+#: src/screens/scale.tsx
+msgid "Saved to Health Connect"
+msgstr "Sparad i Health Connect"
+
+#. While a weight is saved to Health Connect
+#: src/screens/scale.tsx
+msgid "Saving…"
+msgstr "Sparar …"
+
+#. The app’s name, the main screen’s title. A name: keep it unless Scale is known by another name
+#: src/screens/scale.tsx
+msgctxt "app name"
+msgid "Scale"
+msgstr "Scale"
+
+#. Settings section about the paired scale
+#: src/screens/settings.tsx
+msgctxt "device"
+msgid "Scale"
+msgstr "Våg"
+
+#. Update dialog offering a new version, with its version name
+#. placeholder {0}: state.update.versionName
+#: src/components/update-alert.tsx
+msgid "Scale {0} is ready to install."
+msgstr "Scale {0} är redo att installeras."
+
+#. Snackbar after forgetting the paired scale
+#: src/screens/settings.tsx
+msgid "Scale forgotten. The next scale that wakes nearby is paired."
+msgstr "Vågen är glömd. Nästa våg som vaknar i närheten parkopplas."
+
+#. Update dialog while the system installs the new version
+#: src/components/update-alert.tsx
+msgid "Scale restarts once Android has installed it."
+msgstr "Scale startar om när Android har installerat den."
+
+#. App bar button opening settings
+#. Title of the settings screen
+#: src/screens/scale.tsx
+#: src/screens/settings.tsx
+msgid "Settings"
+msgstr "Inställningar"
+
+#. Under Allow Health Connect
+#: src/screens/scale.tsx
+msgid "So each weight is saved for you."
+msgstr "Så att varje vikt sparas åt dig."
+
+#. Title of the app-wide error screen
+#: src/components/app-error.tsx
+msgid "Something went wrong"
+msgstr "Något gick fel"
+
+#. Update channel: tested releases only
+#: src/screens/settings.tsx
+msgid "Stable"
+msgstr "Stabil"
+
+#. Dock line while the scale settles
+#: src/screens/scale.tsx
+msgid "Stand still until the number settles."
+msgstr "Stå still tills siffran stannar."
+
+#. Dock title before there is a weight
+#: src/screens/scale.tsx
+msgid "Step on the scale"
+msgstr "Ställ dig på vågen"
+
+#. Under No scale paired yet: how to pair
+#: src/screens/settings.tsx
+msgid "Step on your scale with the app open to pair it"
+msgstr "Ställ dig på vågen med appen öppen för att parkoppla den"
+
+#. Theme option following the phone
+#: src/screens/settings.tsx
+msgid "System default"
+msgstr "Systemstandard"
+
+#. Under Allow Nearby devices
+#: src/screens/scale.tsx
+msgid "The app needs it to find your scale."
+msgstr "Appen behöver behörigheten för att hitta din våg."
+
+#. Update dialog when the downloaded file did not match its checksum
+#: src/components/update-alert.tsx
+msgid "The downloaded update was damaged, so it wasn’t installed. Try again."
+msgstr "Den nedladdade uppdateringen var skadad och installerades inte. Försök igen."
+
+#. Under Step on the scale before a scale is paired
+#: src/screens/scale.tsx
+msgid "The first scale that wakes nearby is paired with this phone."
+msgstr "Den första vågen som vaknar i närheten parkopplas med den här telefonen."
+
+#. Update dialog when downloading the new version failed
+#: src/components/update-alert.tsx
+msgid "The update couldn’t be downloaded. Check your connection and try again."
+msgstr "Uppdateringen kunde inte laddas ned. Kontrollera anslutningen och försök igen."
+
+#. Dialog title
+#. Settings row: light, dark or system
+#: src/screens/settings.tsx
+msgid "Theme"
+msgstr "Tema"
+
+#. Under Forget this scale: why to do it
+#: src/screens/settings.tsx
+msgid "To pair a different one"
+msgstr "För att parkoppla en annan"
+
+#. Retries a failed update
+#. Retries after an app-wide error
+#. Tries saving the weight again
+#: src/components/app-error.tsx
+#: src/components/update-alert.tsx
+#: src/screens/scale.tsx
+msgid "Try again"
+msgstr "Försök igen"
+
+#. Under Bluetooth is off
+#: src/screens/scale.tsx
+msgid "Turn it on to read your scale."
+msgstr "Slå på det för att läsa av vågen."
+
+#. Asks Android to turn Bluetooth on
+#: src/screens/scale.tsx
+msgid "Turn on"
+msgstr "Slå på"
+
+#. Settings row removing the last weight saved to Health Connect, such as one taken holding something
+#: src/screens/settings.tsx
+msgid "Undo last weight"
+msgstr "Ångra senaste vikten"
+
+#. Settings row when no update is available
+#: src/screens/settings.tsx
+msgid "Up to date"
+msgstr "Senaste versionen"
+
+#. Downloads and installs the new version
+#: src/components/update-alert.tsx
+msgid "Update"
+msgstr "Uppdatera"
+
+#. Dialog title offering a new version
+#. Settings row when an update is available
+#: src/components/update-alert.tsx
+#: src/screens/settings.tsx
+msgid "Update available"
+msgstr "Uppdatering tillgänglig"
+
+#. Dialog title
+#. Settings row choosing which releases the app updates to
+#: src/screens/settings.tsx
+msgid "Update channel"
+msgstr "Uppdateringskanal"
+
+#. Dialog title when an update failed
+#: src/components/update-alert.tsx
+msgid "Update failed"
+msgstr "Uppdateringen misslyckades"
+
+#. Settings section
+#: src/screens/settings.tsx
+msgid "Updates"
+msgstr "Uppdateringar"
+
+#. Settings row showing the app version
+#: src/screens/settings.tsx
+msgid "Version"
+msgstr "Version"
+
+#. The time of the weighing
+#: src/screens/scale.tsx
+msgid "Weighed at {time}"
+msgstr "Vägd kl. {time}"
+
+#. Dock title while the scale settles
+#: src/screens/scale.tsx
+msgid "Weighing…"
+msgstr "Väger …"
+
+#. Snackbar after undoing the last saved weight
+#: src/screens/settings.tsx
+msgid "Weight removed from Health Connect"
+msgstr "Vikten togs bort från Health Connect"
+
+#. Under Health Connect isn’t available
+#: src/screens/settings.tsx
+msgid "Weights are shown but not saved on this phone"
+msgstr "Vikter visas men sparas inte på den här telefonen"
+
+#. A scale that is not paired yet
+#: src/screens/scale.tsx
+msgid "your scale"
+msgstr "din våg"
+
+#. Under Open Health Connect
+#: src/screens/settings.tsx
+msgid "Your weights and the apps that read them"
+msgstr "Dina vikter och apparna som läser dem"
+
+#. Under Install Health Connect
+#: src/screens/scale.tsx
+msgid "Your weights are kept there."
+msgstr "Där sparas dina vikter."

@@ -1,0 +1,25 @@
+packages:
+  - '.'
+
+verifyDepsBeforeRun: false
+
+# Resolve no release younger than three days, here and in CI. A release that is genuinely needed
+# sooner goes in minimumReleaseAgeExclude with its exact version and the reason.
+minimumReleaseAge: 4320
+
+overrides:
+  '@react-native/metro-config': '0.88.1'
+  '@types/react': '19.3.0'
+  vite: 'npm:@voidzero-dev/vite-plus-core@8.3.8000'
+  vitest: '5.1.0'
+
+peerDependencyRules:
+  allowAny:
+    - vite
+    - vitest
+  allowedVersions:
+    typescript: '>=5 <8'
+
+allowBuilds:
+  esbuild: true
+  sharp: true
