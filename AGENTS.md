@@ -28,13 +28,29 @@
   back swipe commits (`onNativeDismissal`). App bars are rebuilt each time their screen's view is
   attached again (`rememberAttachCount` in `Scaffold.kt`): keep it, or a bar left collapsed stays
   stuck when its screen comes back.
+- A theme chosen in Settings crossfades the whole window (`changeTheme`, `WindowCrossfade.kt`): a
+  picture of the old screen fades once the root layout has committed the new colours
+  (`revealWindow`). The focused screen's `Host` takes a new appearance as a prop and keeps its
+  Compose tree, and with it the scroll position; Hosts out of sight are recreated in it.
 - Settings → Licenses reads `src/settings/licenses.json`; run
   `pnpm run licenses:generate` after changing dependencies, and update its `nativeLibraries` when
   a module's Android dependencies change.
 - The scale connection lives in `modules/scale`: `Scale.kt` owns scanning, pairing and
   reconnecting, `ScaleLink.kt` one GATT connection, `Weighing.kt` turns readings into
-  measurements, `Health.kt` writes Health Connect. JS only starts and stops it
-  (`useScaleWhileActive`), shows the state and saves measurements.
+  measurements, `Health.kt` writes Health Connect and keeps the last weight saved (Settings'
+  undo). JS only starts and stops it (`useScaleWhileActive`), shows the state and saves
+  measurements. `Scale` is held by whoever needs it (`acquire`/`release`): the app while in front,
+  the background weighing while it runs.
+- Weigh in the background links the paired scale as a companion device (`ScaleWake.kt`), the one
+  way Android lets the app start a connected-device service and open an activity from the
+  background; off, or the scale forgotten, the link goes. Android wakes `ScaleWakeService` as the
+  scale turns on, and `WeighService` connects, saves each new measurement natively and opens
+  `WeighedActivity`, Material's alert dialog in a see-through activity of its own task, drawn and
+  animated by Compose like the app's dialogs (`WeighedDialog.kt`). The app in front takes the
+  weighing over and no dialog opens. In the background, scans filter on the paired scale's
+  address: Android stops unfiltered scans while the screen is off. No overlay windows:
+  `SYSTEM_ALERT_WINDOW` stays blocked. The notification's and the dialog's strings are Android
+  resources in `modules/scale/android/src/main/res/values/` and `values-sv/`; keep both in step.
 - `docs/PROTOCOL.md` is the protocol spec. Keep it, `Protocol.kt`, `Weighing.kt` and their tests
   in step; add frames captured from real scales to `ProtocolTest.kt` and record findings in the
   spec.

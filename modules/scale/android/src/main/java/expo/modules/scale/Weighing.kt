@@ -8,7 +8,11 @@ internal data class Measurement(
   val value: Double,
   val unit: WeightUnit,
   val kilograms: Double,
-  val measuredAt: Long
+  val measuredAt: Long,
+  /** Weighed while the app was not in front: the background weighing saves it ([WeighService]). */
+  val inBackground: Boolean = false,
+  /** Health Connect's id for it, once the background weighing saved it. */
+  val recordId: String? = null
 )
 
 /**

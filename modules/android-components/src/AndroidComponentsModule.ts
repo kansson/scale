@@ -6,6 +6,9 @@ declare class AndroidComponents extends NativeModule<{ onNativeDismissal: () => 
   freezeScreen?: (tag: number) => Promise<boolean>
   thawScreen?: (tag: number) => Promise<void>
   takeNativeDismissal?: () => boolean
+  coverWindow?: () => Promise<boolean>
+  uncoverWindow?: () => Promise<void>
+  systemIsDark?: () => boolean
 }
 
 const native = requireOptionalNativeModule<AndroidComponents>('AndroidComponents')
@@ -63,4 +66,40 @@ export function takeNativeDismissal(): boolean {
 /** Removes the frame from a screen that stayed. */
 export function thawScreen(tag: number) {
   void native?.thawScreen?.(tag).catch(() => undefined)
+}
+
+/** How long a change may wait for the window's picture before it happens without a crossfade. */
+const COVER_LIMIT_MS = 150
+
+/**
+ * Makes `change` crossfade the whole window: a picture of it is laid over the app and `change` runs
+ * underneath. The picture fades out on `revealWindow`, once the change is committed. Without the
+ * picture in time, the change happens as it is.
+ */
+export async function crossfadeWindow(change: () => void): Promise<void> {
+  const cover = native?.coverWindow
+
+  if (cover) {
+    await Promise.race([
+      cover().catch(() => false),
+      new Promise<boolean>((resolve) => setTimeout(() => resolve(false), COVER_LIMIT_MS)),
+    ])
+  }
+
+  change()
+}
+
+/**
+ * Fades out the picture `crossfadeWindow` laid over the window, after Android has drawn what React
+ * just committed. Does nothing without one.
+ */
+export function revealWindow() {
+  void native?.uncoverWindow?.().catch(() => undefined)
+}
+
+/** The phone's own appearance, whatever the app's theme overrides it with; null when unknown. */
+export function systemColorScheme(): 'dark' | 'light' | null {
+  const dark = native?.systemIsDark?.()
+
+  return dark === undefined ? null : dark ? 'dark' : 'light'
 }

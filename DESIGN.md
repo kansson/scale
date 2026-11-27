@@ -188,6 +188,10 @@ Material 3 expressive corners. The dock has 28dp top corners and square bottom (
 
 - **Style:** connected card rows in `surfaceContainerHigh` (selected rows `secondaryContainer`), 20dp outer / 4dp join corners, 24dp `onSurfaceVariant` leading glyph, optional one-line value, trailing chevron or switch.
 
+### Background weighing dialog (`WeighedDialog.kt`)
+
+- Material's alert dialog with an icon, drawn by Compose in a see-through activity over whatever is on screen: 24dp padding, centred 24dp icon (`secondary` when saved, `error` when not), centred headlineSmall title, bodyMedium text, text buttons at the end. A 60% black dim; it rises 20dp and fades in, and leaves with a 10dp rise, as Android's own dialogs. Done, Back or a tap outside dismisses it; Undo (saved) or Open Scale (not saved) is the other button. Follows the system's light or dark theme on the wallpaper palette.
+
 ### Navigation
 
 - **Top app bar:** Material Scaffold with small (pinned) or large (exit-until-collapsed) bars on `surface`. Actions are 24dp icon buttons labelled for TalkBack. The weighing screen's bar is large, titled Scale, with Settings only.

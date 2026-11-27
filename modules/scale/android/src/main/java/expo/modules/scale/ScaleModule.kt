@@ -21,29 +21,40 @@ import java.io.Serializable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
-/** The JS face of [Scale] and [Health]. JS starts and stops looking and saves what it measured. */
+/**
+ * The JS face of [Scale], [Health] and [ScaleWake]. JS starts and stops looking, saves what it
+ * measured and turns the background weighing on and off.
+ */
 class ScaleModule : Module() {
   private val context: Context
     get() = appContext.reactContext ?: throw Exceptions.ReactContextLost()
 
   private var watcher: Job? = null
+  private var savedWatcher: Job? = null
   private val main = Handler(Looper.getMainLooper())
 
   override fun definition() = ModuleDefinition {
     Name("Scale")
 
-    OnCreate { appContext.reactContext?.let(Scale::restore) }
+    OnCreate {
+      appContext.reactContext?.let { context ->
+        Scale.restore(context)
+        Health.restore(context)
+        main.post { ScaleWake.restore(context) }
+      }
+    }
 
-    Events("onStateChange")
+    Events("onStateChange", "onSavedChange")
 
     OnStartObserving("onStateChange") {
       watcher?.cancel()
       watcher = CoroutineScope(Dispatchers.Main.immediate).launch {
-        Scale.state.collect { state ->
+        Scale.state.combine(ScaleWake.linked, ::stateMap).collect { state ->
           // One event JS could not take must not stop the ones after it.
-          runCatching { sendEvent("onStateChange", state.toMap()) }
+          runCatching { sendEvent("onStateChange", state) }
         }
       }
     }
@@ -53,13 +64,25 @@ class ScaleModule : Module() {
       watcher = null
     }
 
+    OnStartObserving("onSavedChange") {
+      savedWatcher?.cancel()
+      savedWatcher = CoroutineScope(Dispatchers.Main.immediate).launch {
+        Health.saved.collect { saved -> runCatching { sendEvent("onSavedChange", saved.toMap()) } }
+      }
+    }
+
+    OnStopObserving("onSavedChange") {
+      savedWatcher?.cancel()
+      savedWatcher = null
+    }
+
     lateinit var healthPermission: AppContextActivityResultLauncher<HealthPermissionRequest, Set<String>>
 
     RegisterActivityContracts {
       healthPermission = registerForActivityResult(HealthPermissionContract())
     }
 
-    Function("getState") { Scale.state.value.toMap() }
+    Function("getState") { stateMap(Scale.state.value, ScaleWake.linked.value) }
 
     Function("hasPermissions") { Scale.hasPermissions(context) }
 
@@ -77,7 +100,38 @@ class ScaleModule : Module() {
 
     Function("forget") {
       val context = context
-      main.post { Scale.forget(context) }
+      main.post {
+        Scale.forget(context)
+        // Android stops watching for the scale forgotten.
+        ScaleWake.sync()
+      }
+    }
+
+    Function("canWeighInBackground") { ScaleWake.supported(context) }
+
+    /**
+     * Turns Weigh in the background on: Android is asked to watch for the paired scale, which it
+     * confirms in its own dialog while the scale is awake. Resolves `linked`, `notLinked`, `busy`
+     * or `unavailable`.
+     */
+    AsyncFunction("weighInBackground") { promise: Promise ->
+      val activity = appContext.currentActivity
+      main.post {
+        if (activity == null) {
+          promise.resolve(LinkResult.UNAVAILABLE.id)
+        } else {
+          ScaleWake.link(activity) { promise.resolve(it.id) }
+        }
+      }
+    }
+
+    Function("stopWeighingInBackground") {
+      val context = context
+      main.post { ScaleWake.unlink(context) }
+    }
+
+    OnActivityResult { _, payload ->
+      if (payload.requestCode == ScaleWake.REQUEST_LINK) main.post { ScaleWake.onLinkResult(payload.resultCode) }
     }
 
     Function("requestBluetooth") {
@@ -107,11 +161,14 @@ class ScaleModule : Module() {
       granted.containsAll(Health.permissions)
     }
 
-    AsyncFunction("saveWeight") Coroutine { kilograms: Double, measuredAt: Double ->
-      Health.save(context, kilograms, measuredAt.toLong())
+    AsyncFunction("saveWeight") Coroutine { kilograms: Double, measuredAt: Double, value: Double, unit: String ->
+      val weightUnit = WeightUnit.entries.firstOrNull { it.id == unit } ?: throw IllegalArgumentException("unit")
+      Health.save(context, kilograms, measuredAt.toLong(), value, weightUnit)
     }
 
-    AsyncFunction("deleteWeight") Coroutine { id: String -> Health.delete(context, id) }
+    Function("getSaved") { Health.saved.value.toMap() }
+
+    AsyncFunction("undoWeight") Coroutine { recordId: String -> Health.undo(context, recordId) }
 
     Function("openHealthConnect") {
       startActivity(if (Health.status(context) == "available") Health.settingsIntent() else Health.installIntent())
@@ -120,9 +177,16 @@ class ScaleModule : Module() {
     // Nothing is left to show the scale to, such as after a reload: let go of it.
     OnDestroy {
       watcher?.cancel()
-      main.post { Scale.stop() }
+      savedWatcher?.cancel()
+      main.post {
+        ScaleWake.cancelLinking()
+        Scale.stop()
+      }
     }
   }
+
+  private fun stateMap(state: ScaleState, background: Boolean): Map<String, Any?> =
+    state.toMap() + ("background" to background)
 
   /** Opens a system screen. Some phones lack one (no Play Store, no per-app language): skip it. */
   private fun startActivity(intent: Intent) {

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="scale_weighing_channel">Vägning i bakgrunden</string>
+  <string name="scale_weighing_title">Väger</string>
+  <string name="scale_weighing_text">Läser av vågen</string>
+
+  <string name="scale_saved_title">Sparad i Health Connect</string>
+  <string name="scale_saved_text">%1$s, vägd kl. %2$s.</string>
+  <string name="scale_failed_title">Kunde inte spara</string>
+  <string name="scale_not_allowed_text">%1$s, vägd kl. %2$s, sparades inte. Öppna %3$s och tillåt den att skriva vikter i Health Connect.</string>
+  <string name="scale_failed_text">%1$s, vägd kl. %2$s, kunde inte sparas i Health Connect. Öppna %3$s för att försöka igen.</string>
+
+  <string name="scale_undo">Ångra</string>
+  <string name="scale_done">Klar</string>
+  <string name="scale_open">Öppna %1$s</string>
+  <string name="scale_undone">Vikten togs bort från Health Connect</string>
+  <string name="scale_undo_failed">Kunde inte ta bort vikten</string>
+</resources>

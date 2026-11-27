@@ -13,6 +13,7 @@ import Language from '@expo/material-symbols/language.xml'
 import License from '@expo/material-symbols/license.xml'
 import LinkOff from '@expo/material-symbols/link_off.xml'
 import ScaleIcon from '@expo/material-symbols/scale.xml'
+import Sensors from '@expo/material-symbols/sensors.xml'
 import Settings from '@expo/material-symbols/settings.xml'
 import Undo from '@expo/material-symbols/undo.xml'
 import Update from '@expo/material-symbols/update.xml'
@@ -21,6 +22,7 @@ import Update from '@expo/material-symbols/update.xml'
 export const glyphs = {
   autoSave: CheckCircle,
   back: ArrowBack,
+  background: Sensors,
   bluetooth: Bluetooth,
   bluetoothOff: BluetoothDisabled,
   drillIn: ChevronRight,

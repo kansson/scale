@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseHealthStatus, parseScaleState, stoppedScale } from './state'
+import { parseHealthStatus, parseLinkResult, parseScaleState, stoppedScale } from './state'
 
 describe('parseScaleState', () => {
   it('reads the state the native module sends', () => {
@@ -8,11 +8,21 @@ describe('parseScaleState', () => {
       problem: null,
       paired: { address: 'AA:BB', name: 'MIBFS' },
       live: { value: 72.4, unit: 'kg', kilograms: 72.4, stable: true },
-      measurement: { id: 1, value: 72.4, unit: 'kg', kilograms: 72.4, measuredAt: 1000 },
+      measurement: {
+        id: 1,
+        value: 72.4,
+        unit: 'kg',
+        kilograms: 72.4,
+        measuredAt: 1000,
+        recordId: 'record-1',
+      },
+      background: true,
     })
 
     expect(state.connection).toBe('connected')
     expect(state.measurement?.kilograms).toBe(72.4)
+    expect(state.measurement?.recordId).toBe('record-1')
+    expect(state.background).toBe(true)
   })
 
   it('treats a state it cannot read as stopped', () => {
@@ -23,8 +33,16 @@ describe('parseScaleState', () => {
         paired: null,
         live: null,
         measurement: null,
+        background: false,
       }),
     ).toEqual(stoppedScale)
+  })
+})
+
+describe('parseLinkResult', () => {
+  it('treats an unknown answer as not linked', () => {
+    expect(parseLinkResult('linked')).toBe('linked')
+    expect(parseLinkResult('maybe')).toBe('notLinked')
   })
 })
 

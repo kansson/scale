@@ -18,7 +18,16 @@ const scaleStateSchema = z.object({
   /** What the scale shows right now, while someone is on it. */
   live: weightSchema.extend({ stable: z.boolean() }).nullable(),
   /** The weighing's settled weight, which stays after stepping off until the next weighing. */
-  measurement: weightSchema.extend({ id: z.number(), measuredAt: z.number() }).nullable(),
+  measurement: weightSchema
+    .extend({
+      id: z.number(),
+      measuredAt: z.number(),
+      /** Health Connect's id once the background weighing saved it. */
+      recordId: z.string().nullable().catch(null),
+    })
+    .nullable(),
+  /** Weigh in the background is on: Android watches for the paired scale. */
+  background: z.boolean().catch(false),
 })
 
 export type ScaleState = z.infer<typeof scaleStateSchema>
@@ -31,6 +40,7 @@ export const stoppedScale: ScaleState = {
   paired: null,
   live: null,
   measurement: null,
+  background: false,
 }
 
 /** Reads the state the native module sent; anything it cannot read is treated as stopped. */
@@ -46,4 +56,13 @@ export type HealthStatus = (typeof healthStatuses)[number]
 
 export function parseHealthStatus(value: string): HealthStatus {
   return z.enum(healthStatuses).catch('unavailable').parse(value)
+}
+
+export const linkResults = ['linked', 'notLinked', 'busy', 'unavailable'] as const
+
+export type LinkResult = (typeof linkResults)[number]
+
+/** What became of asking Android to watch for the scale; anything else counts as not linked. */
+export function parseLinkResult(value: string): LinkResult {
+  return z.enum(linkResults).catch('notLinked').parse(value)
 }

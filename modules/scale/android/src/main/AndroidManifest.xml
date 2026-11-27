@@ -6,4 +6,40 @@
   <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:maxSdkVersion="30" />
   <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
+
+  <!-- Weigh in the background: Android watches for the linked scale and wakes the app as it turns
+       on (ScaleWake), which may then start the weighing's service from the background and open
+       its dialog. -->
+  <uses-permission android:name="android.permission.REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE" />
+  <uses-permission android:name="android.permission.REQUEST_COMPANION_START_FOREGROUND_SERVICES_FROM_BACKGROUND" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+  <uses-feature android:name="android.software.companion_device_setup" android:required="false" />
+
+  <application>
+    <!-- Woken by Android as the linked scale turns on (ScaleWake). -->
+    <service
+      android:name="expo.modules.scale.ScaleWakeService"
+      android:exported="true"
+      android:permission="android.permission.BIND_COMPANION_DEVICE_SERVICE">
+      <intent-filter>
+        <action android:name="android.companion.CompanionDeviceService" />
+      </intent-filter>
+    </service>
+
+    <!-- Reads the scale and saves the weight while the app is closed. -->
+    <service
+      android:name="expo.modules.scale.WeighService"
+      android:exported="false"
+      android:foregroundServiceType="connectedDevice" />
+
+    <!-- Says the weight was saved, over whatever is on screen: a task of its own, out of Recents. -->
+    <activity
+      android:name="expo.modules.scale.WeighedActivity"
+      android:exported="false"
+      android:excludeFromRecents="true"
+      android:launchMode="singleTask"
+      android:taskAffinity="${applicationId}.weighed"
+      android:theme="@style/ScaleWeighedDialog" />
+  </application>
 </manifest>
