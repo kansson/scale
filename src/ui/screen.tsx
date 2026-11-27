@@ -164,7 +164,7 @@ export function Screen({
 
   return (
     <View ref={frame} style={{ flex: 1 }} collapsable={false}>
-      <Host style={{ flex: 1 }}>
+      <Host style={{ flex: 1 }} focused={focused}>
         <Scaffold
           topBar={topBar}
           scrollBehavior={appBar === 'large' ? 'exitUntilCollapsed' : 'pinned'}

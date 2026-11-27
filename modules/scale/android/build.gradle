@@ -1,5 +1,15 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin:${kotlinVersion}")
+  }
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'expo-module-gradle-plugin'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 group = 'expo.modules.scale'
 version = '0.1.0'
@@ -10,10 +20,22 @@ android {
     versionCode 1
     versionName "0.1.0"
   }
+  buildFeatures {
+    compose true
+  }
 }
 
 dependencies {
   implementation 'androidx.health.connect:connect-client:1.1.0'
+
+  // The background weighing's dialog (WeighedActivity). Match the activity, Compose and Material 3
+  // versions that @expo/ui and modules/android-components are built against.
+  implementation 'androidx.activity:activity:1.10.1'
+  implementation 'androidx.compose.animation:animation-android:1.12.1'
+  implementation 'androidx.compose.foundation:foundation-android:1.12.1'
+  implementation 'androidx.compose.ui:ui-android:1.12.1'
+  implementation 'androidx.compose.material3:material3:1.5.0-beta01'
+  implementation 'androidx.compose.material3:material3-android:1.5.0-beta01'
 
   testImplementation 'junit:junit:4.13.2'
 }

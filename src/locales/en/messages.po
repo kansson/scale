@@ -76,7 +76,9 @@ msgstr "Bluetooth is off"
 
 #. Closes a dialog without changes
 #. Closes a dialog without changes
+#. Closes a dialog without changes
 #: src/components/update-alert.tsx
+#: src/screens/settings.tsx
 #: src/ui/dialogs.tsx
 msgid "Cancel"
 msgstr "Cancel"
@@ -106,11 +108,6 @@ msgstr "Checking…"
 msgid "Close"
 msgstr "Close"
 
-#. The paired scale is connected now
-#: src/screens/settings.tsx
-msgid "Connected"
-msgstr "Connected"
-
 #. Connected, waiting for the first weight
 #: src/screens/scale.tsx
 msgid "Connected to {scaleName}"
@@ -120,6 +117,11 @@ msgstr "Connected to {scaleName}"
 #: src/screens/scale.tsx
 msgid "Connecting to {scaleName}…"
 msgstr "Connecting to {scaleName}…"
+
+#. Goes on to Android’s dialog linking the scale
+#: src/screens/settings.tsx
+msgid "Continue"
+msgstr "Continue"
 
 #. Settings row when the releases could not be read
 #: src/screens/settings.tsx
@@ -150,11 +152,6 @@ msgstr "Dark"
 #: src/components/update-alert.tsx
 msgid "Downloading update"
 msgstr "Downloading update"
-
-#. Under Save automatically while it is on
-#: src/screens/settings.tsx
-msgid "Each weight is saved as it settles"
-msgstr "Each weight is saved as it settles"
 
 #. Settings row unpairing the scale
 #: src/screens/settings.tsx
@@ -263,11 +260,6 @@ msgstr "Open Health Connect"
 msgid "Open settings"
 msgstr "Open settings"
 
-#. Under the paired scale’s name in settings
-#: src/screens/settings.tsx
-msgid "Paired. It connects when you step on it."
-msgstr "Paired. It connects when you step on it."
-
 #. Body of the app-wide error screen
 #: src/components/app-error.tsx
 msgid "Please try again."
@@ -287,11 +279,6 @@ msgstr "Removed from Health Connect"
 #: src/screens/settings.tsx
 msgid "Save automatically"
 msgstr "Save automatically"
-
-#. Under Save automatically while it is off
-#: src/screens/settings.tsx
-msgid "Save each weight from the main screen"
-msgstr "Save each weight from the main screen"
 
 #. Saves the weight shown
 #: src/screens/scale.tsx
@@ -368,6 +355,11 @@ msgstr "Stand still until the number settles."
 msgid "Step on the scale"
 msgstr "Step on the scale"
 
+#. Dialog text before Android’s own dialog links the scale, whose button is Allow. The scale must be awake while Android looks for it
+#: src/screens/settings.tsx
+msgid "Step on your scale so it wakes, then choose Continue and Allow when Android asks. After that, each weight is saved to Health Connect without opening the app, and a dialog says so."
+msgstr "Step on your scale so it wakes, then choose Continue and Allow when Android asks. After that, each weight is saved to Health Connect without opening the app, and a dialog says so."
+
 #. Under No scale paired yet: how to pair
 #: src/screens/settings.tsx
 msgid "Step on your scale with the app open to pair it"
@@ -404,10 +396,10 @@ msgstr "The update couldn’t be downloaded. Check your connection and try again
 msgid "Theme"
 msgstr "Theme"
 
-#. Under Forget this scale: why to do it
+#. Snackbar when the phone cannot watch for the scale
 #: src/screens/settings.tsx
-msgid "To pair a different one"
-msgstr "To pair a different one"
+msgid "This phone can’t weigh in the background"
+msgstr "This phone can’t weigh in the background"
 
 #. Retries a failed update
 #. Retries after an app-wide error
@@ -471,6 +463,12 @@ msgstr "Updates"
 msgid "Version"
 msgstr "Version"
 
+#. Dialog title before turning on Weigh in the background
+#. Settings switch: the scale is read and the weight saved to Health Connect without opening the app
+#: src/screens/settings.tsx
+msgid "Weigh in the background"
+msgstr "Weigh in the background"
+
 #. The time of the weighing
 #: src/screens/scale.tsx
 msgid "Weighed at {time}"
@@ -496,10 +494,15 @@ msgstr "Weights are shown but not saved on this phone"
 msgid "your scale"
 msgstr "your scale"
 
-#. Under Open Health Connect
+#. Snackbar when Android did not find the scale, or its dialog was declined, while turning on Weigh in the background
 #: src/screens/settings.tsx
-msgid "Your weights and the apps that read them"
-msgstr "Your weights and the apps that read them"
+msgid "Your scale wasn’t found. Step on it and try again."
+msgstr "Your scale wasn’t found. Step on it and try again."
+
+#. Snackbar once Weigh in the background is on
+#: src/screens/settings.tsx
+msgid "Your weight is saved each time you step on the scale"
+msgstr "Your weight is saved each time you step on the scale"
 
 #. Under Install Health Connect
 #: src/screens/scale.tsx

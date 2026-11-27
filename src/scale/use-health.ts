@@ -3,7 +3,7 @@ import { AppState } from 'react-native'
 import { z } from 'zod'
 import { getPreferences } from '@/settings/preferences'
 import { Scale } from '../../modules/scale'
-import { rememberLastWeight, useLastWeight } from './last-weight'
+import { useLastWeight } from './last-weight'
 import { type HealthStatus, type Measurement, parseHealthStatus } from './state'
 
 export type HealthAccess = {
@@ -71,15 +71,21 @@ export type Saving =
 
 /**
  * Saves each measurement to Health Connect once: by itself when automatic saving is on and
- * allowed, otherwise when asked. The last one saved can be undone from Settings, such as when
- * someone else stepped on the scale.
+ * allowed, otherwise when asked. One the background weighing saved already comes with its record.
+ * The last one saved can be undone from Settings, such as when someone else stepped on the scale.
  */
 export function useHealthSaving(measurement: Measurement | null, access: HealthAccess) {
   const [saving, setSaving] = useState<{ id: number; saving: Saving } | null>(null)
   const { undone } = useLastWeight()
   // Measurements already handed to Health Connect, so a re-render never saves one twice.
   const handled = useRef(new Set<number>())
-  const stored = measurement && saving?.id === measurement.id ? saving.saving : null
+
+  const savedInBackground: Saving | null = measurement?.recordId
+    ? { phase: 'saved', recordId: measurement.recordId }
+    : null
+
+  const stored =
+    savedInBackground ?? (measurement && saving?.id === measurement.id ? saving.saving : null)
 
   const current: Saving | null =
     stored?.phase === 'saved' && undone.includes(stored.recordId) ? { phase: 'removed' } : stored
@@ -96,15 +102,9 @@ export function useHealthSaving(measurement: Measurement | null, access: HealthA
 
       try {
         const recordId = recordIdSchema.parse(
-          await Scale.saveWeight(next.kilograms, next.measuredAt),
+          await Scale.saveWeight(next.kilograms, next.measuredAt, next.value, next.unit),
         )
 
-        rememberLastWeight({
-          recordId,
-          value: next.value,
-          unit: next.unit,
-          measuredAt: next.measuredAt,
-        })
         show(next.id, { phase: 'saved', recordId })
       } catch {
         show(next.id, { phase: 'failed' })
@@ -116,6 +116,21 @@ export function useHealthSaving(measurement: Measurement | null, access: HealthA
   useEffect(() => {
     // Wait for Health Connect's answer: until then `permitted` is only assumed false.
     if (!measurement || !access.checked || handled.current.has(measurement.id)) return
+
+    // Saved in the background already.
+    if (measurement.recordId) {
+      handled.current.add(measurement.id)
+
+      return
+    }
+
+    // Weighed while the app was away: the background weighing saves it, and says so.
+    if (AppState.currentState !== 'active') {
+      handled.current.add(measurement.id)
+      show(measurement.id, { phase: 'unsaved' })
+
+      return
+    }
 
     if (getPreferences().autoSave && access.permitted) {
       void save(measurement)

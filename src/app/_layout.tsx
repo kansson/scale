@@ -14,6 +14,7 @@ import { getPreferences } from '@/settings/preferences'
 import { applyTheme } from '@/settings/theme'
 import { SystemBack } from '@/ui/system-back'
 import { checkForUpdatesDaily } from '@/updates/app-updates'
+import { revealWindow } from '../../modules/android-components'
 
 export const unstable_settings = { anchor: 'index' }
 
@@ -39,6 +40,12 @@ function AppProviders() {
   useEffect(() => {
     void SystemUI.setBackgroundColorAsync(background)
   }, [background])
+
+  // A theme chosen in Settings crossfades: the old screen's picture fades once the new colours
+  // are committed (changeTheme in src/settings/theme.ts).
+  useEffect(() => {
+    revealWindow()
+  }, [colorScheme])
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The background weighing's notification and dialog. Keep values-sv/ in step. -->
+<resources>
+  <!-- Android's notification settings: the channel of the notification shown while the scale is read in the background. -->
+  <string name="scale_weighing_channel">Weighing in the background</string>
+  <!-- Notification title while the scale is read with the app closed. -->
+  <string name="scale_weighing_title">Weighing</string>
+  <!-- Notification text while the scale is read with the app closed. -->
+  <string name="scale_weighing_text">Reading your scale</string>
+
+  <!-- Dialog title after a weight taken with the app closed was saved. -->
+  <string name="scale_saved_title">Saved to Health Connect</string>
+  <!-- Dialog text after a background save: the weight, such as 72.4 kg, and its time. -->
+  <string name="scale_saved_text">%1$s, weighed at %2$s.</string>
+  <!-- Dialog title when a weight taken with the app closed could not be saved. -->
+  <string name="scale_failed_title">Couldn’t save</string>
+  <!-- Dialog text when Health Connect does not allow the app to write: the weight, its time, and the app's name. -->
+  <string name="scale_not_allowed_text">%1$s, weighed at %2$s, wasn’t saved. Open %3$s and allow it to write weights in Health Connect.</string>
+  <!-- Dialog text when Health Connect refused the weight: the weight, its time, and the app's name. -->
+  <string name="scale_failed_text">%1$s, weighed at %2$s, couldn’t be saved to Health Connect. Open %3$s to try again.</string>
+
+  <!-- Dialog button removing the weight just saved, such as one taken holding something. -->
+  <string name="scale_undo">Undo</string>
+  <!-- Dialog button closing it. -->
+  <string name="scale_done">Done</string>
+  <!-- Dialog button opening the app: its name. -->
+  <string name="scale_open">Open %1$s</string>
+  <!-- Short message after Undo removed the weight. -->
+  <string name="scale_undone">Weight removed from Health Connect</string>
+  <!-- Short message when Undo failed. -->
+  <string name="scale_undo_failed">Couldn’t remove the weight</string>
+</resources>

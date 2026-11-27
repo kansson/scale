@@ -4,12 +4,13 @@ import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import { useFeedback } from '@/lib/feedback'
 import { type LastWeight, undoLastWeight, useLastWeight } from '@/scale/last-weight'
+import { parseLinkResult } from '@/scale/state'
 import { useHealthAccess } from '@/scale/use-health'
 import { useScaleState } from '@/scale/use-scale'
 import { formatWeight, unitSymbol } from '@/scale/weight'
 import { type Preferences, setPreference, type Theme, usePreferences } from '@/settings/preferences'
-import { applyTheme } from '@/settings/theme'
-import { ChoiceDialog } from '@/ui/dialogs'
+import { changeTheme } from '@/settings/theme'
+import { ChoiceDialog, StatusDialog } from '@/ui/dialogs'
 import { Group, type GroupRow, List } from '@/ui/primitives'
 import { Screen } from '@/ui/screen'
 import {
@@ -22,7 +23,7 @@ import { Scale } from '../../modules/scale'
 
 type UpdateChannel = Preferences['updateChannel']
 
-type Dialog = 'theme' | 'updateChannel' | null
+type Dialog = 'theme' | 'updateChannel' | 'background' | null
 
 export function SettingsScreen() {
   const { i18n, t } = useLingui()
@@ -34,6 +35,7 @@ export function SettingsScreen() {
   const { last } = useLastWeight()
   const { showFeedback } = useFeedback()
   const [dialog, setDialog] = useState<Dialog>(null)
+  const [backgroundSupported] = useState(() => Scale.canWeighInBackground())
 
   const themes: Record<Theme, string> = {
     system: t({ message: 'System default', comment: 'Theme option following the phone' }),
@@ -57,6 +59,40 @@ export function SettingsScreen() {
         comment: 'Snackbar after forgetting the paired scale',
       }),
     )
+  }
+
+  /**
+   * Weigh in the background: Health Connect is allowed first, as the weighing saves without
+   * asking, then Android links the paired scale in its own dialog while the scale is awake.
+   */
+  const weighInBackground = async () => {
+    if (!access.permitted) await allowHealth()
+
+    const result = parseLinkResult(await Scale.weighInBackground().catch(() => 'notLinked'))
+
+    if (result === 'linked') {
+      showFeedback(
+        t({
+          message: 'Your weight is saved each time you step on the scale',
+          comment: 'Snackbar once Weigh in the background is on',
+        }),
+      )
+    } else if (result === 'notLinked') {
+      showFeedback(
+        t({
+          message: 'Your scale wasn’t found. Step on it and try again.',
+          comment:
+            'Snackbar when Android did not find the scale, or its dialog was declined, while turning on Weigh in the background',
+        }),
+      )
+    } else if (result === 'unavailable') {
+      showFeedback(
+        t({
+          message: 'This phone can’t weigh in the background',
+          comment: 'Snackbar when the phone cannot watch for the scale',
+        }),
+      )
+    }
   }
 
   const lastWeightValue = (weight: LastWeight) => {
@@ -99,22 +135,29 @@ export function SettingsScreen() {
           key: 'paired',
           glyph: 'scale',
           label: scale.paired.name,
-          value:
-            scale.connection === 'connected'
-              ? t({ message: 'Connected', comment: 'The paired scale is connected now' })
-              : t({
-                  message: 'Paired. It connects when you step on it.',
-                  comment: 'Under the paired scale’s name in settings',
-                }),
         },
+        ...(backgroundSupported && access.status === 'available'
+          ? [
+              {
+                key: 'background',
+                glyph: 'background' as const,
+                label: t({
+                  message: 'Weigh in the background',
+                  comment:
+                    'Settings switch: the scale is read and the weight saved to Health Connect without opening the app',
+                }),
+                checked: scale.background,
+                onPress: () => {
+                  if (scale.background) Scale.stopWeighingInBackground()
+                  else setDialog('background')
+                },
+              },
+            ]
+          : []),
         {
           key: 'forget',
           glyph: 'forget',
           label: t({ message: 'Forget this scale', comment: 'Settings row unpairing the scale' }),
-          value: t({
-            message: 'To pair a different one',
-            comment: 'Under Forget this scale: why to do it',
-          }),
           onPress: forget,
         },
       ]
@@ -140,33 +183,9 @@ export function SettingsScreen() {
               message: 'Save automatically',
               comment: 'Settings switch saving every settled weight to Health Connect',
             }),
-            value: preferences.autoSave
-              ? t({
-                  message: 'Each weight is saved as it settles',
-                  comment: 'Under Save automatically while it is on',
-                })
-              : t({
-                  message: 'Save each weight from the main screen',
-                  comment: 'Under Save automatically while it is off',
-                }),
             checked: preferences.autoSave,
             onPress: () => setPreference('autoSave', !preferences.autoSave),
           },
-          ...(last
-            ? [
-                {
-                  key: 'undo',
-                  glyph: 'undo' as const,
-                  label: t({
-                    message: 'Undo last weight',
-                    comment:
-                      'Settings row removing the last weight saved to Health Connect, such as one taken holding something',
-                  }),
-                  value: lastWeightValue(last),
-                  onPress: () => void undo(),
-                },
-              ]
-            : []),
           access.permitted
             ? {
                 key: 'open',
@@ -174,10 +193,6 @@ export function SettingsScreen() {
                 label: t({
                   message: 'Open Health Connect',
                   comment: 'Settings row opening Health Connect, to see the weights or the access',
-                }),
-                value: t({
-                  message: 'Your weights and the apps that read them',
-                  comment: 'Under Open Health Connect',
                 }),
                 drillIn: true,
                 onPress: () => Scale.openHealthConnect(),
@@ -195,6 +210,21 @@ export function SettingsScreen() {
                 }),
                 onPress: () => void allowHealth(),
               },
+          ...(last
+            ? [
+                {
+                  key: 'undo',
+                  glyph: 'undo' as const,
+                  label: t({
+                    message: 'Undo last weight',
+                    comment:
+                      'Settings row removing the last weight saved to Health Connect, such as one taken holding something',
+                  }),
+                  value: lastWeightValue(last),
+                  onPress: () => void undo(),
+                },
+              ]
+            : []),
         ]
       : access.status === 'updateRequired'
         ? [
@@ -357,7 +387,30 @@ export function SettingsScreen() {
           selected={preferences.theme}
           onSelect={(theme) => {
             setPreference('theme', theme)
-            applyTheme(theme)
+            changeTheme(theme)
+          }}
+          onDismiss={() => setDialog(null)}
+        />
+      ) : dialog === 'background' ? (
+        <StatusDialog
+          title={t({
+            message: 'Weigh in the background',
+            comment: 'Dialog title before turning on Weigh in the background',
+          })}
+          message={t({
+            message:
+              'Step on your scale so it wakes, then choose Continue and Allow when Android asks. After that, each weight is saved to Health Connect without opening the app, and a dialog says so.',
+            comment:
+              'Dialog text before Android’s own dialog links the scale, whose button is Allow. The scale must be awake while Android looks for it',
+          })}
+          confirmLabel={t({
+            message: 'Continue',
+            comment: 'Goes on to Android’s dialog linking the scale',
+          })}
+          dismissLabel={t({ message: 'Cancel', comment: 'Closes a dialog without changes' })}
+          onConfirm={() => {
+            setDialog(null)
+            void weighInBackground()
           }}
           onDismiss={() => setDialog(null)}
         />

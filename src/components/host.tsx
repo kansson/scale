@@ -1,10 +1,16 @@
 import { getMaterialColors, Host as ExpoHost } from '@expo/ui/jetpack-compose'
-import { type ComponentProps, useSyncExternalStore } from 'react'
+import { type ComponentProps, useState, useSyncExternalStore } from 'react'
 import { AppState } from 'react-native'
 import { useAppColorScheme } from '@/lib/app-color-scheme'
 import { seedColor } from '@/lib/app-palette'
 
-type AndroidHostProps = ComponentProps<typeof ExpoHost>
+type AndroidHostProps = ComponentProps<typeof ExpoHost> & {
+  /**
+   * The Host is on screen. A new appearance then reaches it as a prop, keeping its Compose tree
+   * and with it the scroll position, as when the theme is changed in Settings.
+   */
+  focused?: boolean
+}
 
 type MaterialColorScheme = 'dark' | 'light'
 
@@ -92,13 +98,14 @@ function getMaterialPaletteRevision() {
  * own. A Host behind a native-stack screen can miss a prop-only update while detached, producing
  * mixed light and dark surfaces when predictive back reveals it. The resolved scheme is part of
  * the native Host key so every retained Compose tree is recreated in the new appearance before it
- * becomes visible.
+ * becomes visible. The focused Host is attached and takes the new appearance as a prop instead:
+ * recreating it would throw away its scroll position.
  *
  * Expo UI memoizes its JS Material palette by appearance and seed color, so a wallpaper change
  * alone does not invalidate `useMaterialColors()`. Compare the native palette when Android returns
  * to the foreground and remount only when those colors actually changed.
  */
-export function Host({ colorScheme, ...props }: AndroidHostProps) {
+export function Host({ colorScheme, focused = false, ...props }: AndroidHostProps) {
   const systemColorScheme = useAppColorScheme()
 
   const materialPaletteRevision = useSyncExternalStore(
@@ -114,10 +121,20 @@ export function Host({ colorScheme, ...props }: AndroidHostProps) {
         ? 'dark'
         : 'light'
 
+  // Counts the appearance changes that arrived while the Host was out of sight.
+  const [appearance, setAppearance] = useState({ scheme: resolvedColorScheme, remounts: 0 })
+
+  if (appearance.scheme !== resolvedColorScheme) {
+    setAppearance({
+      scheme: resolvedColorScheme,
+      remounts: focused ? appearance.remounts : appearance.remounts + 1,
+    })
+  }
+
   return (
     <ExpoHost
       {...props}
-      key={`${resolvedColorScheme}:${materialPaletteRevision}`}
+      key={`${appearance.remounts}:${materialPaletteRevision}`}
       colorScheme={resolvedColorScheme}
       seedColor={seedColor}
     />

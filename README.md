@@ -18,6 +18,10 @@ describes the protocol.
 - **Saves it to Health Connect**, as a weight from a scale: by itself with _Save automatically_
   on, otherwise with one tap. The last saved weight can be undone from Settings, such as when
   someone else stepped on the scale.
+- **Weighs in the background** with _Weigh in the background_ on (Android 12 and later): Android
+  watches for the paired scale, linked once as a companion device, and wakes the app as it turns
+  on. The weight is saved to Health Connect without opening the app, and a dialog over whatever is
+  on screen, the lock screen too, says so; Done or a tap outside dismisses it, Undo removes it.
 - **Settings**: the paired scale, Health Connect, the theme (system, light or dark), the app's
   language (Android 13 and later), updates, the version and the open-source licences. Colours
   follow the wallpaper on Android 12 and later.

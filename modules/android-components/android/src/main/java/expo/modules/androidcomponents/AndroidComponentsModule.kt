@@ -1,5 +1,7 @@
 package expo.modules.androidcomponents
 
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.view.View
 import com.facebook.react.ReactActivity
 import expo.modules.kotlin.Promise
@@ -56,6 +58,22 @@ class AndroidComponentsModule : Module() {
     AsyncFunction("thawScreen") { tag: Int ->
       appContext.findView<View>(tag)?.let { ScreenFreeze.thaw(it) }
     }.runOnQueue(Queues.MAIN)
+
+    // A picture of the window over it, until the change underneath is drawn and it fades out.
+    AsyncFunction("coverWindow") { promise: Promise ->
+      val activity = appContext.currentActivity ?: return@AsyncFunction promise.resolve(false)
+      WindowCrossfade.cover(activity) { promise.resolve(it) }
+    }.runOnQueue(Queues.MAIN)
+
+    AsyncFunction("uncoverWindow") {
+      WindowCrossfade.uncover()
+    }.runOnQueue(Queues.MAIN)
+
+    // The phone's own dark mode, whatever the app's theme overrides it with.
+    Function("systemIsDark") {
+      val mode = Resources.getSystem().configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+      mode == Configuration.UI_MODE_NIGHT_YES
+    }
 
     ExpoUIView<ScaffoldProps>("ScaffoldView") {
       val onSnackbarDismiss by Event<Unit>()

@@ -45,10 +45,8 @@ export function ChoiceDialog<Value extends string>({
         <Text style={{ typography: 'headlineSmall' }}>{title}</Text>
       </AlertDialog.Title>
       <AlertDialog.Text>
-        <Column
-          modifiers={[fillMaxWidth(), selectableGroup()]}
-          verticalArrangement={{ spacedBy: 2 }}
-        >
+        {/* List rows, one against the next with nothing between, as in Nypa. */}
+        <Column modifiers={[fillMaxWidth(), selectableGroup()]}>
           {options.map((option) => (
             <ListItem
               key={option.value}

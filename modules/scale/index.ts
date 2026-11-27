@@ -1,1 +1,1 @@
-export { type NativeScaleState, Scale } from './src/ScaleModule'
+export { type NativeSaved, type NativeScaleState, Scale } from './src/ScaleModule'
